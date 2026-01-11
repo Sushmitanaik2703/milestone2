@@ -1,17 +1,36 @@
 import { Link } from "react-router-dom";
 import "./MovieCard.css";
 
-export default function MovieCard({ movie }) {
+function MovieCard({ movie, favorites, toggleFavorite }) {
+  const isFavorite = favorites.some((m) => m.imdbID === movie.imdbID);
+
   return (
-    <Link to={`/movie/${movie.imdbID}`} className="card-link">
-      <div className="movie-card">
+    <div className="movie-card">
+      <Link to={`/movie/${movie.imdbID}`} className="movie-link">
         <img
-          src={movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300x450"}
+          src={
+            movie.Poster !== "N/A"
+              ? movie.Poster
+              : "https://via.placeholder.com/300x450?text=No+Image"
+          }
           alt={movie.Title}
+          className="movie-poster"
         />
-        <h4>{movie.Title}</h4>
-        <p>{movie.Year}</p>
-      </div>
-    </Link>
+
+        <div className="movie-info">
+          <h3 className="movie-title">{movie.Title}</h3>
+          <p className="movie-year">{movie.Year}</p>
+        </div>
+      </Link>
+
+      <button
+        className={`fav-btn ${isFavorite ? "added" : ""}`}
+        onClick={() => toggleFavorite(movie)}
+      >
+        {isFavorite ? "✓ Added" : "♡ Add to Favorites"}
+      </button>
+    </div>
   );
 }
+
+export default MovieCard;

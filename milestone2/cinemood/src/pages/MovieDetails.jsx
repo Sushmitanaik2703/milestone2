@@ -6,33 +6,65 @@ import "./MovieDetails.css";
 export default function MovieDetails() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
-    getMovieDetails(id).then(setMovie);
+    fetchMovie();
+    checkFav();
   }, [id]);
 
-  if (!movie) return <p>Loading...</p>;
+  const fetchMovie = async () => {
+    const data = await getMovieDetails(id);
+    setMovie(data);
+  };
+
+  const checkFav = () => {
+    const favs = JSON.parse(localStorage.getItem("favorites")) || [];
+    setIsFav(favs.some((m) => m.imdbID === id));
+  };
+
+  const toggleFav = () => {
+    let favs = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    if (isFav) {
+      favs = favs.filter((m) => m.imdbID !== id);
+    } else {
+      favs.push(movie);
+    }
+
+    localStorage.setItem("favorites", JSON.stringify(favs));
+    setIsFav(!isFav);
+  };
+
+  if (!movie) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
-    <div className="details-container">
-      <img src={movie.Poster} alt={movie.Title} />
-      <div className="details-text">
-        <h2>{movie.Title}</h2>
-        <p>{movie.Plot}</p>
-        <p><b>Genre:</b> {movie.Genre}</p>
-        <p><b>Actors:</b> {movie.Actors}</p>
-        <p><b>Rating:</b> {movie.imdbRating}</p>
-        <button
-          onClick={() => {
-            const favs = JSON.parse(localStorage.getItem("favorites")) || [];
-            if (!favs.find(m => m.imdbID === movie.imdbID)) {
-              favs.push(movie);
-              localStorage.setItem("favorites", JSON.stringify(favs));
-            }
-          }}
-        >
-          Add to Favorites
-        </button>
+    <div
+      className="details-hero"
+      style={{
+        backgroundImage: `linear-gradient(to right, rgba(2,6,23,0.95), rgba(2,6,23,0.4)), url(${movie.Poster})`
+      }}
+    >
+      <div className="details-card">
+        <img src={movie.Poster} alt={movie.Title} />
+
+        <div className="details-info">
+          <h1>{movie.Title}</h1>
+          <p className="meta">
+            {movie.Year} • {movie.Runtime} • ⭐ {movie.imdbRating}
+          </p>
+          <p className="genre">{movie.Genre}</p>
+
+          <p className="plot">{movie.Plot}</p>
+          <p><strong>Actors:</strong> {movie.Actors}</p>
+
+          <button
+            className={`fav-btn ${isFav ? "added" : ""}`}
+            onClick={toggleFav}
+          >
+            {isFav ? "✓ Remove from Favorites" : "♡ Add to Favorites"}
+          </button>
+        </div>
       </div>
     </div>
   );

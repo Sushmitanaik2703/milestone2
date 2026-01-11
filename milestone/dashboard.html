@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Namma Kudla Dashboard</title>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0A6EBD;
+      padding: 18px;
+      text-align: center;
+      color: white;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .container {
+      width: 90%;
+      margin: 30px auto;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color:white;
+    }
+
+    .stats-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stat {
+      background: #fff;
+      padding: 25px;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: 600;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+      border-left: 6px solid #0A6EBD;
+    }
+
+    .chart-card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="logo">Namma Kudla</div>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="destinations.html">Destinations</a>
+    <a href="guide-profile.html">Guides</a>
+    <a href="travel-stories.html">Stories</a>
+    <a href="contact.html">Contact</a>
+
+    <!-- Admin Links -->
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+
+  <!-- Mobile Menu Button -->
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+</header>
+
+
+<div class="container">
+
+  <!-- KEY METRICS -->
+  <h2>Key Metrics</h2>
+
+  <div class="stats-box">
+    <div class="stat">Users: <span id="countUsers">0</span></div>
+    <div class="stat">Blog Posts: <span id="countPosts">0</span></div>
+    <div class="stat">Stories: <span id="countStories">0</span></div>
+    <div class="stat">Comments: <span id="countComments">0</span></div>
+  </div>
+
+
+  <!-- VISITORS CHART -->
+  <div class="chart-card">
+    <h2>Monthly Visitors</h2>
+    <canvas id="visitorsChart"></canvas>
+  </div>
+
+
+  <!-- POSTS CHART -->
+  <div class="chart-card">
+    <h2>Posts Per Category</h2>
+    <canvas id="postsChart"></canvas>
+  </div>
+
+</div>
+
+<script>
+// ====================== LOAD METRICS FROM localStorage ======================
+
+function loadDashboardCounts() {
+  const users = JSON.parse(localStorage.getItem("users") || "[]");
+  const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+  const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+  const comments = JSON.parse(localStorage.getItem("comments") || "[]");
+
+  document.getElementById("countUsers").textContent = users.length;
+  document.getElementById("countPosts").textContent = posts.length;
+  document.getElementById("countStories").textContent = stories.length;
+  document.getElementById("countComments").textContent = comments.length;
+}
+
+loadDashboardCounts();
+
+
+// ============================= VISITORS CHART ==============================
+
+const ctx1 = document.getElementById("visitorsChart").getContext("2d");
+
+new Chart(ctx1, {
+  type: "line",
+  data: {
+    labels: ["July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+    datasets: [{
+      label: "Visitors",
+      data: [120, 200, 160, 260, 310, 380],
+      borderWidth: 3,
+      fill: false,
+      borderColor: "#0A6EBD"
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+
+// =========================== POSTS PER CATEGORY CHART =========================
+
+const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+// Count categories
+const categoryCount = {};
+
+posts.forEach(p => {
+  const cat = p.category || "Uncategorized";
+  categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+});
+
+const categories = Object.keys(categoryCount);
+const counts = Object.values(categoryCount);
+
+const ctx2 = document.getElementById("postsChart").getContext("2d");
+
+new Chart(ctx2, {
+  type: "bar",
+  data: {
+    labels: categories,
+    datasets: [{
+      label: "Posts",
+      data: counts,
+      borderWidth: 1,
+      backgroundColor: "#0A6EBD"
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+</script>
+
+</body>
+</html>

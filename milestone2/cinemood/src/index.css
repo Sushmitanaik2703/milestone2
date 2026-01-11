@@ -51,3 +51,26 @@ body.dark .search-bar input {
   color: white;
   border: 1px solid #444;
 }
+body.dark {
+  background: #020617;
+  color: white;
+}
+body.dark {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+body.dark .navbar {
+  background: linear-gradient(to right, #020617, #020617);
+}
+
+body.dark .movie-card,
+body.dark .card {
+  background: #020617;
+}
+
+body.dark .search-bar {
+  background: #020617;
+  color: white;
+  border: 1px solid #444;
+}

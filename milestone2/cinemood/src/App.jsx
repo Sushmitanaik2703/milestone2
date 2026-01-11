@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
+import Header from "./components/Header";
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
 import MovieDetails from "./pages/MovieDetails";
-import Header from "./components/Header";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -20,7 +20,7 @@ function AnimatedRoutes() {
   );
 }
 
-export default function App() {
+function App() {
   return (
     <Router>
       <Header />
@@ -28,3 +28,5 @@ export default function App() {
     </Router>
   );
 }
+
+export default App;

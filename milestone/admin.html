@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Namma Kudla Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 0;
+      margin: 0;
+    }
+
+    header {
+      background: #0A6EBD;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .container {
+      width: 90%;
+      margin: 20px auto;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #0A6EBD;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background: #0A6EBD;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #084E87;
+    }
+
+    .list-item {
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 10px 0;
+      border-left: 5px solid #0A6EBD;
+    }
+
+    .actions button {
+      margin-right: 10px;
+      background: #333;
+    }
+
+    .actions button.delete {
+      background: #FF3B3B;
+    }
+
+    .actions button.delete:hover {
+      background: #CC2F2F;
+    }
+
+  </style>
+</head>
+
+<body>
+
+
+<header class="main-header">
+  <div class="logo">Namma Kudla</div>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="destinations.html">Destinations</a>
+    <a href="guide-profile.html">Guides</a>
+    <a href="travel-stories.html">Stories</a>
+    <a href="contact.html">Contact</a>
+
+    <!-- Admin Links -->
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+
+  <!-- Mobile Menu Button -->
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+</header>
+
+
+<div class="container">
+
+  <!-- USER MANAGEMENT -->
+  <h2>User Management</h2>
+
+  <div class="card">
+    <h3>Create New User</h3>
+    <form id="createUserForm">
+      <input id="uName" placeholder="Full Name" required>
+
+      <select id="uRole">
+        <option value="visitor">Visitor</option>
+        <option value="blogger">Blogger</option>
+        <option value="guide">Guide</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <button type="submit">Add User</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>All Users</h3>
+    <div id="usersList"></div>
+  </div>
+
+
+
+  <!-- CONTENT MANAGEMENT -->
+  <h2>Content Management</h2>
+
+  <div class="card">
+    <h3>Create New Blog Post</h3>
+
+    <form id="createPostForm">
+      <input id="postTitle" placeholder="Post Title" required>
+
+      <textarea id="postContent" placeholder="Blog Content..." rows="6" required></textarea>
+
+      <input id="postCategory" placeholder="Category (e.g. Beaches)">
+      <input id="postTags" placeholder="Tags (comma separated → beach, sunset)">
+      
+      <button type="submit">Add Blog Post</button>
+    </form>
+  </div>
+
+
+  <div class="card">
+    <h3>All Blog Posts</h3>
+    <div id="postsList"></div>
+  </div>
+
+</div>
+
+
+<script>
+// ======================= USER MANAGEMENT =========================
+
+// Load existing users
+function loadUsers() {
+  let users = JSON.parse(localStorage.getItem('users') || '[]');
+  let container = document.getElementById('usersList');
+  container.innerHTML = "";
+
+  users.forEach((user, i) => {
+    let div = document.createElement('div');
+    div.className = "list-item";
+    div.innerHTML = `
+      <p><strong>${user.name}</strong> - ${user.role}</p>
+      <div class="actions">
+        <button onclick="editUser(${i})">Edit</button>
+        <button class="delete" onclick="deleteUser(${i})">Delete</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+
+document.getElementById("createUserForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+  const user = {
+    name: document.getElementById("uName").value,
+    role: document.getElementById("uRole").value
+  };
+
+  users.push(user);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("User added!");
+
+  this.reset();
+  loadUsers();
+});
+
+
+function deleteUser(index){
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+  users.splice(index, 1);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  loadUsers();
+}
+
+function editUser(index){
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+  let newName = prompt("Enter new name:", users[index].name);
+  let newRole = prompt("Enter new role (visitor/blogger/guide/admin):", users[index].role);
+
+  if(newName){
+    users[index].name = newName;
+    users[index].role = newRole;
+  }
+
+  localStorage.setItem("users", JSON.stringify(users));
+  loadUsers();
+}
+
+
+
+
+
+// ======================= BLOG POST MANAGEMENT =========================
+
+
+// Load posts
+function loadPosts() {
+  let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+  let container = document.getElementById('postsList');
+  container.innerHTML = "";
+
+  posts.forEach((post, i) => {
+    let div = document.createElement('div');
+    div.className = "list-item";
+    div.innerHTML = `
+      <p><strong>${post.title}</strong></p>
+      <p>${post.content.substring(0, 80)}...</p>
+      <small>Category: ${post.category}</small><br>
+      <small>Tags: ${post.tags}</small>
+
+      <div class="actions">
+        <button onclick="editPost(${i})">Edit</button>
+        <button class="delete" onclick="deletePost(${i})">Delete</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+document.getElementById("createPostForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+  const post = {
+    title: document.getElementById("postTitle").value,
+    content: document.getElementById("postContent").value,
+    category: document.getElementById("postCategory").value,
+    tags: document.getElementById("postTags").value,
+    created: new Date().toISOString()
+  };
+
+  posts.push(post);
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  alert("Blog post added!");
+
+  this.reset();
+  loadPosts();
+});
+
+
+function deletePost(index){
+  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+  posts.splice(index, 1);
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  loadPosts();
+}
+
+function editPost(index){
+  let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+  let newTitle = prompt("New title:", posts[index].title);
+  let newContent = prompt("New content:", posts[index].content);
+
+  if(newTitle){
+    posts[index].title = newTitle;
+    posts[index].content = newContent;
+  }
+
+  localStorage.setItem("posts", JSON.stringify(posts));
+  loadPosts();
+}
+
+
+
+// Load data on page load
+loadUsers();
+loadPosts();
+
+</script>
+
+</body>
+</html>

@@ -1,30 +1,86 @@
-.details-page {
+.details-hero {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
   display: flex;
-  gap: 30px;
-  padding: 30px;
-  color: #fff;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
 }
 
-.details-page img {
-  width: 300px;
-  border-radius: 10px;
+.details-card {
+  display: flex;
+  gap: 30px;
+  max-width: 1000px;
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 20px;
+  padding: 25px;
+  color: white;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.details-card img {
+  width: 280px;
+  border-radius: 14px;
 }
 
 .details-info {
-  max-width: 600px;
+  flex: 1;
+}
+
+.details-info h1 {
+  font-size: 34px;
+}
+
+.meta {
+  color: #cbd5f5;
+  margin: 8px 0;
+}
+
+.genre {
+  color: #facc15;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.plot {
+  line-height: 1.6;
+  margin-bottom: 12px;
 }
 
 .fav-btn {
-  margin-top: 20px;
-  padding: 12px 20px;
+  margin-top: 15px;
+  padding: 10px 18px;
+  border-radius: 8px;
   border: none;
-  border-radius: 25px;
-  background: #facc15;
+  background: #e50914;
+  color: white;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.fav-btn.remove {
-  background: #ef4444;
-  color: rgb(17, 3, 3);
+.fav-btn.added {
+  background: #16a34a;
+}
+
+.fav-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .details-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .details-card img {
+    width: 220px;
+  }
+
+  .details-info h1 {
+    font-size: 24px;
+  }
 }
