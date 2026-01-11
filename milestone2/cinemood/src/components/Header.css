@@ -1,0 +1,41 @@
+.navbar {
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(to right, #020617, #1e293b);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #facc15;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #e5e7eb;
+  font-weight: bold;
+}
+
+.nav-links a:hover {
+  color: #facc15;
+}
+
+.theme-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #facc15;
+  color: #020617;
+  font-weight: bold;
+}
+.logo-link {
+  text-decoration: none;
+}

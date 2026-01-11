@@ -1,0 +1,30 @@
+.details-page {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  color: #fff;
+}
+
+.details-page img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.details-info {
+  max-width: 600px;
+}
+
+.fav-btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  background: #facc15;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.fav-btn.remove {
+  background: #ef4444;
+  color: rgb(17, 3, 3);
+}
